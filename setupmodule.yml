@@ -1,0 +1,9 @@
+- name: setup module
+  hosts: all
+  tasks:
+      - name: setup module
+        setup:
+        register: output
+      - name: print the result of setup module
+        debug:
+          var: ansible_facts

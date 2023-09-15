@@ -1,0 +1,26 @@
+---
+- name: Create directories with correct ownership and permissions
+  hosts: linux
+  become: true
+
+  vars_prompt:
+    - name: directories
+      prompt: enter directories comma separated
+      private: no
+    - name: u_item
+      prompt: enter user ownership
+      private: no
+    - name: g_item
+      prompt: enter group ownership
+      private: no
+
+
+  tasks:
+    - name: Create directories with appropriate ownership and permissions
+      file:
+        path: "{{ item }}"
+        state: directory
+        owner: "{{ u_item }}"
+        group: "{{ g_item }}"
+        mode: "0755"
+      with_items: "{{ directories.split(',') }}"

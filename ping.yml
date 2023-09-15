@@ -1,0 +1,11 @@
+---
+- name: check connection of servers
+  hosts: linux
+  gather_facts: false
+  tasks:
+    - name: ping command
+      command: 'ping -c1 {{ ansible_host }}'
+      register: result
+    - name: print the result
+      debug:
+        msg: "{{ result }}"
