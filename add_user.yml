@@ -4,21 +4,23 @@
   become: true
   vars_prompt:
       - name: u_item
-        prompt: enter username which you want to create on remote servers
+        prompt: enter user name which you want to create on remote servers
         private: no
       - name: p_item
         prompt: enter password for the user
         private: yes
+      - name: g_item
+        prompt: enter group name to which you want to add your user 
+        private: no
 
   tasks:
-    - name: Ensure group exists
+    - name: Ensure user group exists
       group:
-       name: "{{ item }}"
+       name: "{{ g_item }}"
        state: present
-      with_items: "{{ u_item.split(',') }}"
     - name: Create User
       user:
-        name: "{{ u_item }}"
-        groups: "{{ u_item }}"
-        password: "{{ p_item | password_hash('sha512') }}"
-        state: "present"
+       name: "{{ u_item }}"
+       groups: "{{ g_item }}"
+       password: "{{ p_item | password_hash('sha512') }}"
+       state: "present"

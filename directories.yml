@@ -5,13 +5,13 @@
 
   vars_prompt:
     - name: directories
-      prompt: enter directories comma separated
+      prompt: enter directories with comma separated which you want to create on remote servers
       private: no
     - name: u_item
-      prompt: enter user ownership
+      prompt: enter user ownership for directories
       private: no
     - name: g_item
-      prompt: enter group ownership
+      prompt: enter group ownership for directories
       private: no
 
 
