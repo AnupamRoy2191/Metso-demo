@@ -20,9 +20,6 @@
         name: Tomcat9
         state: stopped
       ignore_errors: yes
-    - name: Debug target_dir
-      debug:
-        var: target_dir
     - name: Extract Apache Tomcat
       win_unzip:
         src: D:\tomcat.zip
@@ -31,7 +28,7 @@
       win_environment:
         name: CATALINA_HOME
         state: present
-        value: "{{ target_dir }}\\apache-tomcat-9.0.80"
+        value: "{{ target_dir }}\apache-tomcat-9.0.80"
         level: machine
     - name: Set Tomcat Environment Variables for JAVA_HOME
       win_environment:
@@ -43,17 +40,21 @@
       win_shell: Get-Service -Name Tomcat9
       register: tomcat_service_info
       ignore_errors: yes
-    - name: Install Apache Tomcat Service if not exists
+
+    - name: Change directory to Tomcat bin folder and install Tomcat Service
       win_shell: |
-          Set-Location -Path "{{ target_dir }}\\apache-tomcat-9.0.80\\bin"
-          .\\service.bat install
-      when: tomcat_service_info.rc != 0  # Install only if the service doesn't exist
+        cd "{{ target_dir }}\\apache-tomcat-9.0.80\\bin"
+        "{{ target_dir }}\\apache-tomcat-9.0.80\\bin\\service.bat install"
+      args:
+        chdir: "{{ target_dir }}\\apache-tomcat-9.0.80\\bin"
+      when: tomcat_service_info.rc != 0 
+
     - name: Start Apache Tomcat Service
       win_service:
         name: Tomcat9
         start_mode: auto
         state: started
+      when: tomcat_service_info.status == "Stopped"
     - name: Check Tomcat URL
       win_uri:
         url: http://172.178.19.181:8080/
-
