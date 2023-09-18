@@ -4,13 +4,13 @@
   become_method: pwsh
   vars_prompt:
       - name: u_item
-        prompt: enter username which you want to create on remote servers
+        prompt: enter user name which you want to create on remote servers
         private: no
       - name: p_item
         prompt: enter password for the user
         private: yes
       - name: g_item
-        prompt: enter groupname for the user
+        prompt: enter group name to which you want to add your user
         private: no
 
   tasks:

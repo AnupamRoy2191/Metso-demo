@@ -2,6 +2,10 @@
 - name: Install Java and Apache Tomcat
   hosts: linux
   become: yes
+  vars_prompt:
+    name: target_dir
+    prompt: Enter the target directory where you want to install Tomcat
+    private: no
   tasks:
     - name: Install Java
       apt:
@@ -23,12 +27,12 @@
     - name: Extract Apache Tomcat
       ansible.builtin.unarchive:
         src: /tmp/apache-tomcat-10.0.11.tar.gz
-        dest: /opt
+        dest: "{{ target_dir }}"
         remote_src: yes
 
     - name: Set Tomcat user permissions
       ansible.builtin.file:
-        path: /opt/apache-tomcat-10.0.11
+        path: "{{ target_dir }}/apache-tomcat-10.0.11"
         owner: ansible
         group: ansible
         recurse: yes
@@ -44,8 +48,8 @@
           [Service]
           Type=forking
           User=root
-          ExecStart=/bin/bash /opt/apache-tomcat-10.0.11/bin/startup.sh
-          ExecStop=/bin/bash /opt/apache-tomcat-10.0.11/bin/shutdown.sh
+          ExecStart=/bin/bash {{ target_dir }}/apache-tomcat-10.0.11/bin/startup.sh
+          ExecStop=/bin/bash {{ target_dir }}/opt/apache-tomcat-10.0.11/bin/shutdown.sh
           Restart=on-abnormal
 
           [Install]

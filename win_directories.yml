@@ -5,10 +5,10 @@
 
   vars_prompt:
     - name: directories
-      prompt: enter directories comma separated
+      prompt: enter directories with comma separated which you want to create on remote vms
       private: no
     - name: u_item
-      prompt: enter owner for directories
+      prompt: enter owner who will manage these directories
       private: no
 
   tasks:
