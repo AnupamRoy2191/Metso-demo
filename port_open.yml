@@ -4,14 +4,9 @@
   gather_facts: no
   become: yes
   tasks:
-    - name: Install packaging library
-      command: /usr/bin/python3 -m pip install msrestazure
     - name: Open ports in NSG
-      azure_rm_securitygroup:
-        resource_group: metso
-        name: Linux-vm-1-nsg
-        rules:
-          - name: Allow ports
+      azure_rm_securitygroup_rule:
+            name: Allow ports
             protocol: Tcp
             source_port_range: "*"
             destination_port_range: 8084
