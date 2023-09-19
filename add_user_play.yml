@@ -7,8 +7,8 @@
       private: no
   tasks:
     - name: Import linux add user playbook
-      include: add_user.yml
+      include_tasks: add_user.yml
       when: machine == "linux"
     - name: Import windows add user playbook
-      include: win_add_user.yml
+      include_tasks: win_add_user.yml
       when: machine == "windows"
