@@ -1,42 +1,34 @@
 ---
-- name: Install Java and Apache Tomcat
-  hosts: linux
-  become: yes
-  vars_prompt:
-    name: target_dir
-    prompt: Enter the target directory where you want to install Tomcat
-    private: no
-  tasks:
     - name: Install Java
       apt:
         name: openjdk-11-jdk
         state: present
-
+      become: yes
     - name: Set JAVA_HOME environment variable
       ansible.builtin.lineinfile:
         path: /etc/environment
         regexp: '^JAVA_HOME='
         line: 'JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64'
-
+      become: yes
     - name: Download Apache Tomcat
       get_url:
         url: https://archive.apache.org/dist/tomcat/tomcat-10/v10.0.11/bin/apache-tomcat-10.0.11.tar.gz
         dest: /tmp/apache-tomcat-10.0.11.tar.gz
         mode: 0644
-
+      become: yes
     - name: Extract Apache Tomcat
       ansible.builtin.unarchive:
         src: /tmp/apache-tomcat-10.0.11.tar.gz
         dest: "{{ target_dir }}"
         remote_src: yes
-
+      become: yes
     - name: Set Tomcat user permissions
       ansible.builtin.file:
         path: "{{ target_dir }}/apache-tomcat-10.0.11"
         owner: ansible
         group: ansible
         recurse: yes
-
+      become: yes
     - name: create tomcat service file
       copy:
         dest: /etc/systemd/system/tomcat.service
@@ -54,10 +46,11 @@
 
           [Install]
           WantedBy=multi-user.target
-
+        become: yes
     - name: Enable tomcat service & start
       systemd:
         name: tomcat
         enabled: yes
         state: restarted
         daemon-reload: yes
+      become: yes

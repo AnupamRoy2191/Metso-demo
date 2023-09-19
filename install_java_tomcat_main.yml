@@ -1,0 +1,17 @@
+---
+- name: Install Java & Tomcat on linux & windows os
+  hosts: "{{ machine }}"
+  vars_prompt:
+      - name: machine
+        prompt: "Please enter on which machines you want to Install Java & Tomcat: \n 1. windows \n 2. linux "
+        private: no
+      - name: target_dir
+        prompt: Enter the target directory where you want to install Tomcat
+        private: no
+  tasks:
+      - name: Import linux Install Java & Tomcat playbook
+        include_tasks: install_java_tomcat.yml
+        when: machine == "linux"
+      - name: Import windows Install Java & Tomcat playbook
+        include_tasks: win_install_java_tomcat.yml
+        when: machine == "windows"
