@@ -2,9 +2,9 @@
 - name: add users in linux & windows os
   hosts: "{{ machine }}"
   vars_prompt:
-      - name: machine
-        prompt: "Please enter on which machines you want to add user: \n 1. windows \n 2. linux : "
-        private: no
+    - name: machine
+      prompt: "Please enter on which machines you want to add user: \n 1. windows \n 2. linux : "
+      private: no
   tasks:
     - name: Import linux add user playbook
       import_playbook: add_user.yml
