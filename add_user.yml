@@ -12,5 +12,5 @@
        groups: "{{ g_item }}"
        password: "{{ p_item | password_hash('sha512') }}"
        state: "present"
-       become: true
-       become_method: sudo
+      become: true
+
