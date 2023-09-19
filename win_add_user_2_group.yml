@@ -16,4 +16,5 @@
         user: "{{ g_item }}"
         rights: "full_control" 
         state: present
+        type: allow
       with_items: "{{ target_dir.split(',') }}"
