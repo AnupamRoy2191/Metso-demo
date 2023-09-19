@@ -9,7 +9,6 @@
     - name: Import linux add user playbook
       import_playbook: add_user.yml
       when machine == "linux"
-
     - name: Import windows add user playbook
       import_playbook: win_add_user.yml
       when machine == "windows"
