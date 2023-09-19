@@ -14,7 +14,7 @@
       win_acl:
         path: "{{ item }}"
         user: "{{ g_item }}"
-        rights: "full_control" 
+        rights: "FullControl" 
         state: present
         type: allow
       with_items: "{{ target_dir.split(',') }}"
