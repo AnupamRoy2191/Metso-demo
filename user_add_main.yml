@@ -3,7 +3,7 @@
   hosts: "{{ machine }}"
   vars_prompt:
       - name: machine
-        prompt: "Please enter on which machines you want to add user: \n 1. windows \n 2. linux : "
+        prompt: "Please enter on which machines you want to add user: \n 1. windows \n 2. linux "
         private: no
       - name: u_item
         prompt: enter user name which you want to create on remote servers
