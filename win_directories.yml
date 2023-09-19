@@ -8,7 +8,10 @@
       prompt: enter directories with comma separated which you want to create on remote vms
       private: no
     - name: u_item
-      prompt: enter owner who will manage these directories
+      prompt: enter owner who will manage directories
+      private: no
+    - name: g_item
+      prompt: enter group ownership for directories
       private: no
 
   tasks:
@@ -22,4 +25,12 @@
         path: "{{ item }}"
         user: "{{ u_item }}"
         recurse: true
+      with_items: "{{ directories.split(',') }}"
+    - name: Add New Group to Directory ACL
+      win_acl:
+        path: "{{ item }}"
+        user: "{{ g_item }}"
+        rights: "FullControl" 
+        state: present
+        type: allow
       with_items: "{{ directories.split(',') }}"
