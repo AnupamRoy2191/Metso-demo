@@ -3,9 +3,12 @@
       group:
        name: "{{ g_item }}"
        state: present
+      become: true
+
     - name: Create User
       user:
        name: "{{ u_item }}"
        groups: "{{ g_item }}"
        password: "{{ p_item | password_hash('sha512') }}"
        state: "present"
+       become: true

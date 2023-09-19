@@ -4,10 +4,12 @@
         name: "{{ item }}"
         state: present
       with_items: "{{ g_item.split(',') }}"
-    - name: Create a Windows user & add to groups
+      become_method: pwsh
+- name: Create a Windows user & add to groups
       win_user:
         name: "{{ u_item }}"
         password: "{{ p_item | password_hash('sha512') }}"
         state: present
         groups: "{{ item }}"
       with_items: "{{ g_item.split(',') | list }}"
+      become_method: pwsh
