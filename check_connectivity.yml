@@ -1,0 +1,14 @@
+---
+- name: Check connectivity with linux & windows machines
+  hosts: "{{ machine }}"
+  vars_prompt:
+      - name: machine
+        prompt: "Please enter on which machines OS you want to check the connectivity with ansible controller : \n 1. windows \n 2. linux "
+        private: no
+  tasks:
+      - name: Import linux ping playbook
+        include_tasks: ping.yml
+        when: machine == "linux"
+      - name: Import windows ping playbook
+        include_tasks: win_ping.yml
+        when: machine == "windows"
