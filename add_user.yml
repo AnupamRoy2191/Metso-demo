@@ -1,19 +1,4 @@
 ---
-- name: Add user and groups on remote servers
-  hosts: linux
-  become: true
-  vars_prompt:
-      - name: u_item
-        prompt: enter user name which you want to create on remote servers
-        private: no
-      - name: p_item
-        prompt: enter password for the user
-        private: yes
-      - name: g_item
-        prompt: enter group name to which you want to add your user 
-        private: no
-
-  tasks:
     - name: Ensure user group exists
       group:
        name: "{{ g_item }}"

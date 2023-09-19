@@ -1,21 +1,5 @@
 ---
-- name: Add user and group on Windows Server
-  hosts: windows
-  become_method: pwsh
-  vars_prompt:
-      - name: u_item
-        prompt: enter user name which you want to create on remote servers
-        private: no
-      - name: p_item
-        prompt: enter password for the user
-        private: yes
-      - name: g_item
-        prompt: enter group name to which you want to add your user
-        private: no
-
-  tasks:
-
-    - name: Create a Windows group (if not already exists)
+- name: Create a Windows group (if not already exists)
       win_group:
         name: "{{ item }}"
         state: present
