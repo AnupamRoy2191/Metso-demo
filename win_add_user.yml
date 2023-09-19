@@ -1,15 +1,15 @@
 ---
 - name: Create a Windows group (if not already exists)
-      win_group:
-        name: "{{ item }}"
-        state: present
-      with_items: "{{ g_item.split(',') }}"
-      become_method: pwsh
+  win_group:
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ g_item.split(',') }}"
+  become_method: pwsh
 - name: Create a Windows user & add to groups
-      win_user:
-        name: "{{ u_item }}"
-        password: "{{ p_item | password_hash('sha512') }}"
-        state: present
-        groups: "{{ item }}"
-      with_items: "{{ g_item.split(',') | list }}"
-      become_method: pwsh
+  win_user:
+    name: "{{ u_item }}"
+    password: "{{ p_item | password_hash('sha512') }}"
+    state: present
+    groups: "{{ item }}"
+  with_items: "{{ g_item.split(',') | list }}"
+  become_method: pwsh
