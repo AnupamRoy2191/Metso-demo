@@ -12,7 +12,7 @@
   tasks:
     - name: Add New Group to Directory ACL
       win_acl:
-        path: "{{ target_dir }}"
+        path: "{{ item }}"
         user: "{{ g_item }}"
         rights: "full_control" 
         state: present
