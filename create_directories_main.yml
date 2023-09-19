@@ -1,0 +1,23 @@
+---
+- name: create directories in linux & windows os
+  hosts: "{{ machine }}"
+  vars_prompt:
+    - name: machine
+      prompt: "Please enter on which machines you want to create directories: \n 1. windows \n 2. linux "
+      private: no
+    - name: directories
+      prompt: enter directories with comma separated which you want to create on remote servers
+      private: no
+    - name: u_item
+      prompt: enter user ownership for directories
+      private: no
+    - name: g_item
+      prompt: enter group ownership for directories
+      private: no
+  tasks:
+    - name: Import linux create directories playbook
+      include_tasks: directories.yml
+      when: machine == "linux"
+    - name: Import windows create directories playbook
+      include_tasks: win_directories.yml
+      when: machine == "windows"

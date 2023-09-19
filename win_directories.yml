@@ -1,31 +1,19 @@
 ---
-- name: Create directories with correct ownership and permissions
-  hosts: windows
-  become_method: pwsh
-
-  vars_prompt:
-    - name: directories
-      prompt: enter directories with comma separated which you want to create on remote vms
-      private: no
-    - name: u_item
-      prompt: enter owner who will manage directories
-      private: no
-    - name: g_item
-      prompt: enter group ownership for directories
-      private: no
-
-  tasks:
     - name: Create directories
       win_file:
         path: "{{ item }}"
         state: directory
       with_items: "{{ directories.split(',') }}"
+      become_method: pwsh
+
     - name: Change owner of path
       win_owner:
         path: "{{ item }}"
         user: "{{ u_item }}"
         recurse: true
       with_items: "{{ directories.split(',') }}"
+      become_method: pwsh
+
     - name: Add New Group to Directory ACL
       win_acl:
         path: "{{ item }}"
@@ -34,3 +22,4 @@
         state: present
         type: allow
       with_items: "{{ directories.split(',') }}"
+      become_method: pwsh
