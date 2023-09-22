@@ -3,12 +3,12 @@
   hosts: "{{ machine }}"
   vars_prompt:
       - name: machine
-        prompt: "Please enter on which machines OS you want to check the connectivity with ansible controller : \n 1. windows \n 2. linux "
+        prompt: "Please enter on which machines OS you want to check the connectivity with ansible controller : \n 1. windows \n 2. linux \n all "
         private: no
   tasks:
       - name: Import linux ping playbook
         include_tasks: ping.yml
-        when: machine == "linux"
+        when: machine == "linux" or machine == "all"
       - name: Import windows ping playbook
         include_tasks: win_ping.yml
-        when: machine == "windows"
+        when: machine == "windows" or machine == "all"
