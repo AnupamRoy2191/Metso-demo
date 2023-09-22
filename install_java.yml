@@ -1,0 +1,42 @@
+---
+- name: install Java
+  hosts: 52.188.62.217
+  vars_prompt:
+      - name: target_dir
+        prompt: Enter the target directory where you want to install Tomcat
+        private: no
+      - name: u_item
+        prompt: "Please enter user ownership who will manage Java"
+        private: no
+      - name: g_item
+        prompt: "Please enter group ownership who will manage Java"
+        private: no
+  tasks:
+      - name: ensure installation directory created for Java
+        file:
+          path: "{{ target_dir }}"
+          state: directory
+          group: "{{ g_item }}"
+          owner: "{{ u_item }}"
+          recurse: true
+          
+      - name: Download Java 11 From AZ Gitlab 
+        get_url:
+          url: "https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.tar.gz"
+          dest: /tmp
+          mode: 0755
+          group: "{{ g_item }}"
+          owner: "{{ u_item }}"
+      
+      - name: Unarchive a file that needs to be downloaded (added in 2.0)
+        unarchive:
+          src: "/tmp/jdk-21_linux-x64_bin.tar"
+          dest: "{{ target_dir }}"
+          remote_src: yes
+      
+      - name: set JAVA_HOME env variables
+        blockinfile:
+          path: /etc/profile
+          block: | 
+              export JAVA_HOME={{ target_dir }}/jdk-21
+              export PATH=$JAVA_HOME:$PATH
