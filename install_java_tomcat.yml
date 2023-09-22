@@ -46,7 +46,7 @@
 
           [Install]
           WantedBy=multi-user.target
-        become: yes
+      become: yes
     - name: Enable tomcat service & start
       systemd:
         name: tomcat
