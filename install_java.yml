@@ -4,7 +4,7 @@
   become: true
   vars_prompt:
       - name: target_dir
-        prompt: Enter the target directory where you want to install Tomcat
+        prompt: Enter the target directory where you want to install Java
         private: no
       - name: u_item
         prompt: "Please enter user ownership who will manage Java"
