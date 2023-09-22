@@ -31,7 +31,7 @@
       
       - name: Unarchive a file that needs to be downloaded (added in 2.0)
         unarchive:
-          src: "/tmp/jdk-21_linux-x64_bin.tar"
+          src: "/tmp/jdk-21_linux-x64_bin.tar.gz"
           dest: "{{ target_dir }}"
           remote_src: yes
       
