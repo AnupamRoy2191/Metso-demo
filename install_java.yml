@@ -1,6 +1,7 @@
 ---
 - name: install Java
   hosts: 52.188.62.217
+  become: true
   vars_prompt:
       - name: target_dir
         prompt: Enter the target directory where you want to install Tomcat
