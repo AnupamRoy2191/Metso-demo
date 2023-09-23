@@ -3,19 +3,22 @@
   hosts: 52.188.62.217
   become: true
   vars_prompt:
-      - name: target_dir
+      - name: java_target_dir
         prompt: Enter the target directory where you want to install Java
         private: no
+      - name: tomcat_target_dir
+        prompt: Enter the target directory where you want to install tomcat
+        private: no
       - name: u_item
-        prompt: "Please enter user ownership who will manage Java"
+        prompt: "Please enter user ownership who will manage Java & Tomcat"
         private: no
       - name: g_item
-        prompt: "Please enter group ownership who will manage Java"
+        prompt: "Please enter group ownership who will manage Java & Tomcat"
         private: no
   tasks:
       - name: ensure installation directory created for Java
         file:
-          path: "{{ target_dir }}"
+          path: "{{ java_target_dir }}"
           state: directory
           group: "{{ g_item }}"
           owner: "{{ u_item }}"
@@ -29,15 +32,88 @@
           group: "{{ g_item }}"
           owner: "{{ u_item }}"
       
-      - name: Unarchive a file downloaded file to "{{ target_dir }}"
+      - name: Unarchive a file downloaded file to "{{ java_target_dir }}"
         unarchive:
           src: "/tmp/jdk-21_linux-x64_bin.tar.gz"
-          dest: "{{ target_dir }}"
+          dest: "{{ java_target_dir }}"
           remote_src: yes
       
       - name: set JAVA_HOME env variables
         blockinfile:
           path: /etc/profile
           block: | 
-              export JAVA_HOME={{ target_dir }}/jdk-21
+              export JAVA_HOME={{ java_target_dir }}/jdk-21
               export PATH=$JAVA_HOME:$PATH
+
+      - name: ensure installation directory created for Tomcat
+        file:
+          path: "{{tomcat_target_dir}}"
+          state: directory
+          group: "{{ g_item }}"
+          owner: "{{ u_item }}"
+	  
+      - name: Download Apache Tomcat
+        get_url:
+          url: https://archive.apache.org/dist/tomcat/tomcat-10/v10.0.11/bin/apache-tomcat-10.0.11.tar.gz
+          dest: /tmp/apache-tomcat-10.0.11.tar.gz
+          mode: 0755
+          group: "{{ g_item }}"
+          owner: "{{ u_item }}"
+        become: yes
+        
+      - name: Extract Apache Tomcat
+        unarchive:
+          src: /tmp/apache-tomcat-10.0.11.tar.gz
+          dest: "{{ tomcat_target_dir }}"
+          remote_src: yes
+        become: yes
+        
+      - name: create tomcat service file
+        become: yes
+        copy:
+          dest: /etc/systemd/system/tomcat.service
+          content: |-
+            [Unit]
+            Description=Tomcat Service
+            After=network.target
+	  
+            [Service]
+            Type=forking
+            User=root
+            Environment=JAVA_HOME={{ java_target_dir }}/jdk-21
+            ExecStart=/bin/bash {{tomcat_target_dir}}/apache-tomcat-10.0.11/bin/startup.sh
+            ExecStop=/bin/bash {{tomcat_target_dir}}/apache-tomcat-10.0.11/bin/shutdown.sh
+            Restart=on-abnormal
+	  
+            [Install]
+            WantedBy=multi-user.target
+	  
+      - name: Enable tomcat service & start
+        become: yes
+        systemd:
+          name: tomcat
+          enabled: yes
+          state: restarted
+          daemon-reload: yes
+	  
+      - name: change {{tomcat_target_dir}} permission to user {{ u_item }} & group {{ g_item }}
+        ansible.builtin.file:
+          path: "{{tomcat_target_dir}}"
+          group: "{{ g_item }}"
+          owner: "{{ u_item }}"
+          recurse: yes
+	  
+      - name: Install ACL package
+        ansible.builtin.apt:
+          name: acl
+          state: present
+	  
+      - name: Sets default ACL for {{ u_item }} on {{tomcat_target_dir}}
+        ansible.posix.acl:
+          path: "{{tomcat_target_dir}}"
+          entity: "{{ u_item }}"
+          etype: user
+          permissions: rwx
+          default: true
+          state: present
+          recurse: yes
