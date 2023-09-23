@@ -13,6 +13,11 @@
         prompt: "Please enter group ownership who will manage Tomcat"
         private: no
   tasks:
+    - name: update apt cache
+      apt:
+        update_cache: yes
+      become: yes
+      
     - name: ensure installation directory created for Tomcat
       file:
         path: "{{tomcat_target_dir}}"
@@ -36,34 +41,6 @@
         remote_src: yes
       become: yes
       
-    - name: Set Tomcat user permissions
-      file:
-        path: "{{ tomcat_target_dir }}/apache-tomcat-10.0.11"
-        group: "{{ g_item }}"
-        owner: "{{ u_item }}"
-        recurse: yes
-      become: yes
-
-    - name: create tomcat start shell script
-      copy:
-        dest: "{{tomcat_target_dir}}/apache-tomcat-10.0.11/bin/tomcat_start.sh"
-        content: | 
-            #!/bin/bash
-            export JAVA_HOME=/opt/java/jdk-21/
-            export PATH=$JAVA_HOME:$PATH
-            {{tomcat_target_dir}}/apache-tomcat-10.0.11/bin/startup.sh
-        mode: u+rwx,g+rx
-
-    - name: create tomcat stop shell script
-      copy:
-        dest: "{{tomcat_target_dir}}/apache-tomcat-10.0.11/bin/tomcat_stop.sh"
-        content: | 
-            #!/bin/bash
-            export JAVA_HOME=/opt/java/jdk-21/
-            export PATH=$JAVA_HOME:$PATH
-            {{tomcat_target_dir}}/apache-tomcat-10.0.11/bin/shutdown.sh
-        mode: u+rwx,g+rx
-
     - name: create tomcat service file
       become: yes
       copy:
@@ -76,8 +53,9 @@
           [Service]
           Type=forking
           User=root
-          ExecStart=/bin/bash {{tomcat_target_dir}}/apache-tomcat-10.0.11/bin/tomcat_start.sh
-          ExecStop=/bin/bash {{tomcat_target_dir}}/apache-tomcat-10.0.11/bin/tomcat_stop.sh
+          Environment=JAVA_HOME=/opt/java/jdk-21
+          ExecStart=/bin/bash {{tomcat_target_dir}}/apache-tomcat-10.0.11/bin/startup.sh
+          ExecStop=/bin/bash {{tomcat_target_dir}}/apache-tomcat-10.0.11/bin/shutdown.sh
           Restart=on-abnormal
 
           [Install]
