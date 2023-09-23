@@ -1,7 +1,6 @@
 ---
 - name: Install Java & Tomcat
   hosts: 52.188.66.251
-  become: true
   vars_prompt:
       - name: java_target_dir
         prompt: Enter the target directory where you want to install Java
