@@ -42,7 +42,7 @@
         blockinfile:
           path: /etc/profile
           block: | 
-              export JAVA_HOME={{ java_target_dir }}/jdk-21
+              export JAVA_HOME="{{ java_target_dir }}/jdk-21"
               export PATH="$PATH:$JAVA_HOME/bin"
 
       - name: ensure installation directory created for Tomcat
