@@ -49,10 +49,79 @@
         dest: "{{ java_target_dir }}"
       become_method: pwsh
 
-    - name: Set Tomcat Environment Variables for JAVA_HOME
+    - name: Set Environment Variables for JAVA_HOME
       win_environment:
         name: JAVA_HOME
         state: present
         value: "{{ java_target_dir }}\\jdk-21"
         level: machine
+      become_method: pwsh
+
+    - name: ensure installation directory created for Tomcat
+      win_file:
+        path: "{{ tomcat_target_dir }}"
+        state: directory
+      become_method: pwsh
+
+    - name: set owner of Tomcat installation directory
+      win_owner:
+        path: "{{ tomcat_target_dir }}"
+        user: "{{ u_item }}"
+        recurse: true
+      become_method: pwsh
+
+    - name: set group ownership of Tomcat installation directory
+      win_acl:
+        path: "{{ tomcat_target_dir }}"
+        user: "{{ g_item }}"
+        rights: "FullControl" 
+        state: present
+        type: allow
+      become_method: pwsh
+
+    - name: Download Apache Tomcat
+      win_get_url:
+        url: https://downloads.apache.org/tomcat/tomcat-9/v9.0.80/bin/apache-tomcat-9.0.80-windows-x64.zip
+        dest: D:\tomcat.zip
+      become_method: pwsh
+
+    - name: Stop Apache Tomcat Service
+      win_service:
+        name: Tomcat9
+        state: stopped
+      ignore_errors: yes
+      become_method: pwsh
+
+    - name: Extract Apache Tomcat
+      win_unzip:
+        src: D:\tomcat.zip
+        dest: "{{ tomcat_target_dir }}"
+      become_method: pwsh
+
+    - name: Set Tomcat Environment Variables for CATALINA_HOME
+      win_environment:
+        name: CATALINA_HOME
+        state: present
+        value: "{{ tomcat_target_dir }}\\apache-tomcat-9.0.80"
+        level: machine
+      become_method: pwsh
+
+    - name: Check if Tomcat service exists
+      win_shell: Get-Service -Name Tomcat9
+      register: tomcat_service_info
+      ignore_errors: yes
+      become_method: pwsh
+      
+    - name: Install Apache Tomcat Service if not exists
+      win_shell: |
+          Set-Location -Path "{{ tomcat_target_dir }}\\apache-tomcat-9.0.80\\bin"
+          .\\service.bat install
+      when: tomcat_service_info.rc != 0  # Install only if the service doesn't exist
+      become_method: pwsh
+
+    - name: Start Apache Tomcat Service
+      win_service:
+        name: Tomcat9
+        start_mode: auto
+        state: started
       become_method: pwsh
