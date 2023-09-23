@@ -12,12 +12,7 @@
       - name: g_item
         prompt: "Please enter group ownership who will manage Tomcat"
         private: no
-  tasks:
-    - name: update apt cache
-      apt:
-        update_cache: yes
-      become: yes
-      
+  tasks:      
     - name: ensure installation directory created for Tomcat
       file:
         path: "{{tomcat_target_dir}}"
@@ -75,6 +70,11 @@
         group: "{{ g_item }}"
         owner: "{{ u_item }}"
         recurse: yes
+
+    - name: Install ACL package
+      ansible.builtin.apt:
+        name: acl
+        state: present
 
     - name: Sets default ACL for {{ u_item }} on {{tomcat_target_dir}}
       ansible.posix.acl:
