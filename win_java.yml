@@ -39,7 +39,7 @@
       
     - name: Download Java
       win_get_url:
-        url: https://download.oracle.com/java/21/latest/jdk-21_windows-x64_bin.zip
+        url: https://builds.openlogic.com/downloadJDK/openlogic-openjdk/8u382-b05/openlogic-openjdk-8u382-b05-windows-x64.zip
         dest: D:\java.zip
       become_method: pwsh
       
@@ -53,7 +53,7 @@
       win_environment:
         name: JAVA_HOME
         state: present
-        value: "{{ java_target_dir }}\\jdk-21"
+        value: "{{ java_target_dir }}\\openlogic-openjdk-8u382-b05-windows-x64\\openlogic-openjdk-8u382-b05-windows-64"
         level: machine
       become_method: pwsh
 
