@@ -1,0 +1,51 @@
+---
+- name: Install Java & Tomcat
+  hosts: 52.188.66.251
+  become: true
+  vars_prompt:
+      - name: java_target_dir
+        prompt: Enter the target directory where you want to install Java
+        private: no
+      - name: tomcat_target_dir
+        prompt: Enter the target directory where you want to install tomcat
+        private: no
+      - name: u_item
+        prompt: "Please enter user ownership who will manage Java & Tomcat"
+        private: no
+      - name: g_item
+        prompt: "Please enter group ownership who will manage Java & Tomcat"
+        private: no
+  tasks:
+    - name: ensure installation directory created for Java
+      win_file:
+        path: "{{ java_target_dir }}"
+        state: directory
+      become_method: pwsh
+
+    - name: set owner of Java installation directory
+      win_owner:
+        path: "{{ java_target_dir }}"
+        user: "{{ u_item }}"
+        recurse: true
+      become_method: pwsh
+
+    - name: set group ownership of Java installation directory
+      win_acl:
+        path: "{{ java_target_dir }}"
+        user: "{{ g_item }}"
+        rights: "FullControl" 
+        state: present
+        type: allow
+      become_method: pwsh
+      
+    - name: Download Java
+      win_get_url:
+        url: https://download.oracle.com/java/21/latest/jdk-21_windows-x64_bin.zip
+        dest: D:\java.zip
+      become_method: pwsh
+      
+    - name: Extract Java installer
+      win_unzip:
+        src: D:\java.zip
+        dest: "{{ java_target_dir }}"
+      become_method: pwsh
