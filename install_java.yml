@@ -1,6 +1,6 @@
 ---
 - name: install Java
-  hosts: 52.188.62.217
+  hosts: linux
   become: true
   vars_prompt:
       - name: java_target_dir
