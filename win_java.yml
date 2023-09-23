@@ -81,13 +81,13 @@
 
     - name: Download Apache Tomcat
       win_get_url:
-        url: https://downloads.apache.org/tomcat/tomcat-9/v9.0.80/bin/apache-tomcat-9.0.80-windows-x64.zip
+        url: https://downloads.apache.org/tomcat/tomcat-10/v10.1.13/bin/apache-tomcat-10.1.13-windows-x64.zip
         dest: D:\tomcat.zip
       become_method: pwsh
 
     - name: Stop Apache Tomcat Service
       win_service:
-        name: Tomcat9
+        name: Tomcat10
         state: stopped
       ignore_errors: yes
       become_method: pwsh
@@ -102,26 +102,26 @@
       win_environment:
         name: CATALINA_HOME
         state: present
-        value: "{{ tomcat_target_dir }}\\apache-tomcat-9.0.80"
+        value: "{{ tomcat_target_dir }}\\apache-tomcat-10.1.13"
         level: machine
       become_method: pwsh
 
     - name: Check if Tomcat service exists
-      win_shell: Get-Service -Name Tomcat9
+      win_shell: Get-Service -Name Tomcat10
       register: tomcat_service_info
       ignore_errors: yes
       become_method: pwsh
       
     - name: Install Apache Tomcat Service if not exists
       win_shell: |
-          Set-Location -Path "{{ tomcat_target_dir }}\\apache-tomcat-9.0.80\\bin"
+          Set-Location -Path "{{ tomcat_target_dir }}\\apache-tomcat-10.1.13\\bin"
           .\\service.bat install
       when: tomcat_service_info.rc != 0  # Install only if the service doesn't exist
       become_method: pwsh
 
     - name: Start Apache Tomcat Service
       win_service:
-        name: Tomcat9
+        name: Tomcat10
         start_mode: auto
         state: started
       become_method: pwsh
