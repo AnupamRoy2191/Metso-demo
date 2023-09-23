@@ -1,6 +1,7 @@
 ---
 - name: Install Java & Tomcat
   hosts: 52.188.66.251
+  become: true
   vars_prompt:
       - name: java_target_dir
         prompt: Enter the target directory where you want to install Java
@@ -47,4 +48,12 @@
       win_unzip:
         src: D:\java.zip
         dest: "{{ java_target_dir }}"
+      become_method: pwsh
+
+    - name: Set Tomcat Environment Variables for JAVA_HOME
+      win_environment:
+        name: JAVA_HOME
+        state: present
+        value: "{{ java_target_dir }}\\jdk-21"
+        level: machine
       become_method: pwsh
