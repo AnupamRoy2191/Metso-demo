@@ -1,6 +1,6 @@
 ---
 - name: install tomcat
-  hosts: 52.188.62.217
+  hosts: linux
   become: true
   vars_prompt:
       - name: tomcat_target_dir
