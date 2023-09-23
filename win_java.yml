@@ -53,7 +53,7 @@
       win_environment:
         name: JAVA_HOME
         state: present
-        value: "{{ java_target_dir }}\\openlogic-openjdk-8u382-b05-windows-x64\\openlogic-openjdk-8u382-b05-windows-64"
+        value: "{{ java_target_dir }}\\openlogic-openjdk-8u382-b05-windows-x64\\openlogic-openjdk-8u382-b05-windows-64\\bin"
         level: machine
       become_method: pwsh
 
