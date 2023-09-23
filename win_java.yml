@@ -63,22 +63,6 @@
         state: directory
       become_method: pwsh
 
-    - name: set owner of Tomcat installation directory
-      win_owner:
-        path: "{{ tomcat_target_dir }}"
-        user: "{{ u_item }}"
-        recurse: true
-      become_method: pwsh
-
-    - name: set group ownership of Tomcat installation directory
-      win_acl:
-        path: "{{ tomcat_target_dir }}"
-        user: "{{ g_item }}"
-        rights: "FullControl" 
-        state: present
-        type: allow
-      become_method: pwsh
-
     - name: Download Apache Tomcat
       win_get_url:
         url: https://downloads.apache.org/tomcat/tomcat-10/v10.1.13/bin/apache-tomcat-10.1.13-windows-x64.zip
@@ -124,4 +108,20 @@
         name: Tomcat10
         start_mode: auto
         state: started
+      become_method: pwsh
+
+    - name: set owner of Tomcat installation directory
+      win_owner:
+        path: "{{ tomcat_target_dir }}"
+        user: "{{ u_item }}"
+        recurse: true
+      become_method: pwsh
+
+    - name: set group ownership of Tomcat installation directory
+      win_acl:
+        path: "{{ tomcat_target_dir }}"
+        user: "{{ g_item }}"
+        rights: "FullControl" 
+        state: present
+        type: allow
       become_method: pwsh
