@@ -1,5 +1,5 @@
 ---
-- name: install Java
+- name: Install Java & Tomcat
   hosts: linux
   become: true
   vars_prompt:
