@@ -121,7 +121,7 @@
 
     - name: Start Apache Tomcat Service
       win_service:
-        name: Tomcat9
+        name: Tomcat10
         start_mode: auto
         state: started
       become_method: pwsh
