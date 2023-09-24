@@ -119,15 +119,6 @@
         type: allow
       become_method: pwsh
 
-    - name: set group ownership of Tomcat installation directory
-      win_acl:
-        path: "{{ tomcat_target_dir }}"
-        user: "{{ u_item }}"
-        rights: "FullControl" 
-        state: present
-        type: allow
-      become_method: pwsh
-
     - name: Start Apache Tomcat Service
       win_service:
         name: Tomcat9
