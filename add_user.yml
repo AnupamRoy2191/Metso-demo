@@ -1,12 +1,12 @@
 ---
-    - name: Ensure user group exists
+    - name: Ensure user's group exists
       group:
        name: "{{ g_item }}"
        state: present
       become: true
 
 
-    - name: Create User
+    - name: Create User on machines
       user:
        name: "{{ u_item }}"
        groups: "{{ g_item }}"

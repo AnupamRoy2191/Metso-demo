@@ -1,18 +1,18 @@
 ---
-- name: add users in linux & windows os
+- name: Create users in linux & windows os
   hosts: "{{ machine }}"
   vars_prompt:
       - name: machine
-        prompt: "Please enter on which machines you want to add user: \n 1. windows \n 2. linux "
+        prompt: "Please mention on which OS machines you want to add user: \n 1. windows \n 2. linux "
         private: no
       - name: u_item
-        prompt: enter user name which you want to create on remote servers
+        prompt: Please mention user name which you want to create on remote servers
         private: no
       - name: p_item
-        prompt: enter password for the user
+        prompt: Please mention password for the user
         private: yes
       - name: g_item
-        prompt: enter group name to which you want to add your user 
+        prompt: Please mention group name to which you want to add your user 
         private: no
   tasks:
       - name: Import linux add user playbook

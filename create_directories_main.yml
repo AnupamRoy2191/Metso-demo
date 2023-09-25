@@ -1,18 +1,18 @@
 ---
-- name: create directories in linux & windows os
+- name: Create directories in linux & windows OS
   hosts: "{{ machine }}"
   vars_prompt:
     - name: machine
-      prompt: "Please enter on which machines you want to create directories: \n 1. windows \n 2. linux "
+      prompt: "Please mention on which OS machines you want to create directories: \n 1. windows \n 2. linux \n"
       private: no
     - name: directories
-      prompt: enter directories with comma separated which you want to create on remote servers
+      prompt: Please mention directories with comma separated which you want to create on remote servers
       private: no
     - name: u_item
-      prompt: enter user ownership for directories
+      prompt: Please mention user ownership for directories
       private: no
     - name: g_item
-      prompt: enter group ownership for directories
+      prompt: Please mention group ownership for directories
       private: no
   tasks:
     - name: Import linux create directories playbook

@@ -1,5 +1,5 @@
 ---
-    - name: test connection
+    - name: test connection on remote machines
       win_ping:
       register: result
     - name: print the result

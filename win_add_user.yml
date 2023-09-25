@@ -1,11 +1,11 @@
 ---
-- name: Create a Windows group (if not already exists)
+- name: Ensure user's group exists
   win_group:
     name: "{{ item }}"
     state: present
   with_items: "{{ g_item.split(',') }}"
   become_method: pwsh
-- name: Create a Windows user & add to groups
+- name: Create a user & add to groups
   win_user:
     name: "{{ u_item }}"
     password: "{{ p_item | password_hash('sha512') }}"

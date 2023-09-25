@@ -6,7 +6,7 @@
       with_items: "{{ directories.split(',') }}"
       become_method: pwsh
 
-    - name: Change owner of path
+    - name: Add user ownership to these directories
       win_owner:
         path: "{{ item }}"
         user: "{{ u_item }}"
@@ -14,7 +14,7 @@
       with_items: "{{ directories.split(',') }}"
       become_method: pwsh
 
-    - name: Add New Group to Directory ACL
+    - name: Add Group ownership to these directories
       win_acl:
         path: "{{ item }}"
         user: "{{ g_item }}"
