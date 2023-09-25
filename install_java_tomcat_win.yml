@@ -59,7 +59,7 @@
         state: stopped
       ignore_errors: yes
       become_method: pwsh
-
+      no_log: true
     - name: Extract Apache Tomcat
       win_unzip:
         src: D:\tomcat.zip
@@ -79,7 +79,7 @@
       register: tomcat_service_info
       ignore_errors: yes
       become_method: pwsh
-      
+      no_log: true
     - name: Install Apache Tomcat Service if not exists
       win_shell: |
           Set-Location -Path "{{ tomcat_target_dir }}\\apache-tomcat-10.1.13\\bin"
