@@ -5,13 +5,22 @@
       - name: machine
         prompt: "Please enter on which machines you want to Install Java & Tomcat: \n 1. windows \n 2. linux "
         private: no
-      - name: target_dir
-        prompt: Enter the target directory where you want to install Tomcat
+      - name: java_target_dir
+        prompt: Enter the target directory where you want to install Java
+        private: no
+      - name: tomcat_target_dir
+        prompt: Enter the target directory where you want to install tomcat
+        private: no
+      - name: u_item
+        prompt: "Please enter user ownership who will manage Java & Tomcat"
+        private: no
+      - name: g_item
+        prompt: "Please enter group ownership who will manage Java & Tomcat"
         private: no
   tasks:
       - name: Import linux Install Java & Tomcat playbook
-        include_tasks: install_java_tomcat.yml
+        include_tasks: install_java_tomcat_linux.yml
         when: machine == "linux"
       - name: Import windows Install Java & Tomcat playbook
-        include_tasks: win_install_java_tomcat.yml
+        include_tasks: install_java_tomcat_win.yml
         when: machine == "windows"

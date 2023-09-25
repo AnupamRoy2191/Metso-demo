@@ -1,20 +1,4 @@
 ---
-- name: Install Java & Tomcat
-  hosts: windows
-  vars_prompt:
-      - name: java_target_dir
-        prompt: Enter the target directory where you want to install Java
-        private: no
-      - name: tomcat_target_dir
-        prompt: Enter the target directory where you want to install tomcat
-        private: no
-      - name: u_item
-        prompt: "Please enter user ownership who will manage Java & Tomcat"
-        private: no
-      - name: g_item
-        prompt: "Please enter group ownership who will manage Java & Tomcat"
-        private: no
-  tasks:
     - name: ensure installation directory created for Java
       win_file:
         path: "{{ java_target_dir }}"

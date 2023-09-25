@@ -1,21 +1,4 @@
 ---
-- name: Install Java & Tomcat
-  hosts: linux
-  become: true
-  vars_prompt:
-      - name: java_target_dir
-        prompt: Enter the target directory where you want to install Java
-        private: no
-      - name: tomcat_target_dir
-        prompt: Enter the target directory where you want to install tomcat
-        private: no
-      - name: u_item
-        prompt: "Please enter user ownership who will manage Java & Tomcat"
-        private: no
-      - name: g_item
-        prompt: "Please enter group ownership who will manage Java & Tomcat"
-        private: no
-  tasks:
       - name: ensure installation directory created for Java
         file:
           path: "{{ java_target_dir }}"
@@ -23,7 +6,7 @@
           group: "{{ g_item }}"
           owner: "{{ u_item }}"
           recurse: true
-          
+        become: yes 
       - name: Download Java 11
         get_url:
           url: "https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.tar.gz"
@@ -31,27 +14,27 @@
           mode: 0755
           group: "{{ g_item }}"
           owner: "{{ u_item }}"
-      
+        become: yes
       - name: Unarchive a file downloaded file to "{{ java_target_dir }}"
         unarchive:
           src: "/tmp/jdk-21_linux-x64_bin.tar.gz"
           dest: "{{ java_target_dir }}"
           remote_src: yes
-      
+        become: yes
       - name: set JAVA_HOME env variables
         blockinfile:
           path: /etc/profile
           block: | 
               export JAVA_HOME="{{ java_target_dir }}/jdk-21"
               export PATH="$PATH:$JAVA_HOME/bin"
-
+        become: yes
       - name: ensure installation directory created for Tomcat
         file:
           path: "{{tomcat_target_dir}}"
           state: directory
           group: "{{ g_item }}"
           owner: "{{ u_item }}"
-
+        become: yes
       - name: Download Apache Tomcat
         get_url:
           url: https://archive.apache.org/dist/tomcat/tomcat-10/v10.0.11/bin/apache-tomcat-10.0.11.tar.gz
@@ -102,12 +85,12 @@
           group: "{{ g_item }}"
           owner: "{{ u_item }}"
           recurse: yes
-
+        become: yes
       - name: Install ACL package
         ansible.builtin.apt:
           name: acl
           state: present
-
+        become: yes
       - name: Sets default ACL for {{ u_item }} on {{tomcat_target_dir}}
         ansible.posix.acl:
           path: "{{tomcat_target_dir}}"
@@ -117,3 +100,4 @@
           default: true
           state: present
           recurse: yes
+        become: yes
