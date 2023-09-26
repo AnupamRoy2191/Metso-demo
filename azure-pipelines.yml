@@ -6,8 +6,7 @@
 trigger:
 - main
 
-pool:
-  name: Ansible-Controller-Machine
+pool: Default
 
 steps:
 - script: echo Hello, world!
