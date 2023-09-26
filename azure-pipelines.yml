@@ -11,8 +11,8 @@ pool: Default
 steps:
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
-- script: ansible -i inv.yml -m ping linux
-  displayName: 'check connectivity on linux servers'
+- script: ansible-playbook -i inv.yml check_connectivity.yml
+  displayName: 'check connectivity'
 # - script: |
 #     echo Add other tasks to build, test, and deploy your project.
 #     echo See https://aka.ms/yaml
