@@ -14,7 +14,7 @@ pool: Default
 steps:
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
-- script: | 
+- script: |
     read -p "Please mention on which OS machines you want to check the connectivity with ansible controller : \n 1. windows \n 2. linux \n: " targetHosts
     ansible-playbook -e "machine=$targetHosts" -i inv.yml check_connectivity.yml
   displayName: 'check connectivity'
