@@ -1,18 +1,18 @@
 ---
-    - name: ensure installation directory created for Java
+    - name: Ensure installation directory created for Java
       win_file:
         path: "{{ java_target_dir }}"
         state: directory
       become_method: pwsh
 
-    - name: set owner of Java installation directory
+    - name: Set user ownership of Java installation directory
       win_owner:
         path: "{{ java_target_dir }}"
         user: "{{ u_item }}"
         recurse: true
       become_method: pwsh
 
-    - name: set group ownership of Java installation directory
+    - name: Set group ownership of Java installation directory
       win_acl:
         path: "{{ java_target_dir }}"
         user: "{{ g_item }}"
@@ -21,13 +21,13 @@
         type: allow
       become_method: pwsh
       
-    - name: Download Java
+    - name: Download Java package
       win_get_url:
         url: https://download.oracle.com/java/21/latest/jdk-21_windows-x64_bin.zip
         dest: D:\java.zip
       become_method: pwsh
       
-    - name: Extract Java installer
+    - name: Extract Java package to "{{ java_target_dir }}"
       win_unzip:
         src: D:\java.zip
         dest: "{{ java_target_dir }}"
@@ -41,26 +41,27 @@
         level: machine
       become_method: pwsh
 
-    - name: ensure installation directory created for Tomcat
+    - name: Ensure installation directory created for Tomcat
       win_file:
         path: "{{ tomcat_target_dir }}"
         state: directory
       become_method: pwsh
 
-    - name: Download Apache Tomcat
+    - name: Download Apache Tomcat package
       win_get_url:
         url: https://downloads.apache.org/tomcat/tomcat-10/v10.1.13/bin/apache-tomcat-10.1.13-windows-x64.zip
         dest: D:\tomcat.zip
       become_method: pwsh
 
-    - name: Stop Apache Tomcat Service
+    - name: Stop Apache Tomcat Service if exist on remote server
       win_service:
         name: Tomcat10
         state: stopped
       ignore_errors: yes
       become_method: pwsh
       no_log: true
-    - name: Extract Apache Tomcat
+
+    - name: Extract Apache Tomcat package to "{{ tomcat_target_dir }}"
       win_unzip:
         src: D:\tomcat.zip
         dest: "{{ tomcat_target_dir }}"
@@ -74,12 +75,13 @@
         level: machine
       become_method: pwsh
 
-    - name: Check if Tomcat service exists
+    - name: Check if Tomcat service exists on remote server
       win_shell: Get-Service -Name Tomcat10
       register: tomcat_service_info
       ignore_errors: yes
       become_method: pwsh
       no_log: true
+
     - name: Install Apache Tomcat Service if not exists
       win_shell: |
           Set-Location -Path "{{ tomcat_target_dir }}\\apache-tomcat-10.1.13\\bin"
@@ -87,7 +89,7 @@
       when: tomcat_service_info.rc != 0  # Install only if the service doesn't exist
       become_method: pwsh
 
-    - name: set owner of Tomcat installation directory
+    - name: Set user ownership of Tomcat installation directory
       win_owner:
         path: "{{ tomcat_target_dir }}"
         user: "{{ u_item }}"

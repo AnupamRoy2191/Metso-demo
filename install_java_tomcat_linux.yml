@@ -1,5 +1,5 @@
 ---
-      - name: ensure installation directory created for Java
+      - name: Ensure installation directory created for Java
         file:
           path: "{{ java_target_dir }}"
           state: directory
@@ -7,7 +7,7 @@
           owner: "{{ u_item }}"
           recurse: true
         become: yes 
-      - name: Download Java 11
+      - name: Download Java Package
         get_url:
           url: "https://download.oracle.com/java/21/latest/jdk-21_linux-x64_bin.tar.gz"
           dest: /tmp
@@ -15,27 +15,27 @@
           group: "{{ g_item }}"
           owner: "{{ u_item }}"
         become: yes
-      - name: Unarchive a file downloaded file to "{{ java_target_dir }}"
+      - name: Extract downloaded Java package file to "{{ java_target_dir }}"
         unarchive:
           src: "/tmp/jdk-21_linux-x64_bin.tar.gz"
           dest: "{{ java_target_dir }}"
           remote_src: yes
         become: yes
-      - name: set JAVA_HOME env variables
+      - name: Set JAVA_HOME environment variables
         blockinfile:
           path: /etc/profile
           block: | 
               export JAVA_HOME="{{ java_target_dir }}/jdk-21"
               export PATH="$PATH:$JAVA_HOME/bin"
         become: yes
-      - name: ensure installation directory created for Tomcat
+      - name: Ensure installation directory created for Tomcat
         file:
           path: "{{tomcat_target_dir}}"
           state: directory
           group: "{{ g_item }}"
           owner: "{{ u_item }}"
         become: yes
-      - name: Download Apache Tomcat
+      - name: Download Apache Tomcat package
         get_url:
           url: https://archive.apache.org/dist/tomcat/tomcat-10/v10.0.11/bin/apache-tomcat-10.0.11.tar.gz
           dest: /tmp/apache-tomcat-10.0.11.tar.gz
@@ -44,14 +44,14 @@
           owner: "{{ u_item }}"
         become: yes
         
-      - name: Extract Apache Tomcat
+      - name: Extract downloaded Tomcat package to "{{ tomcat_target_dir }}"
         unarchive:
           src: /tmp/apache-tomcat-10.0.11.tar.gz
           dest: "{{ tomcat_target_dir }}"
           remote_src: yes
         become: yes
         
-      - name: create tomcat service file
+      - name: Create tomcat systemD service file
         become: yes
         copy:
           dest: /etc/systemd/system/tomcat.service
@@ -79,7 +79,7 @@
           state: restarted
           daemon-reload: yes
 
-      - name: change {{tomcat_target_dir}} permission to user {{ u_item }} & group {{ g_item }}
+      - name: Change {{tomcat_target_dir}} ownership permission to user {{ u_item }} & group {{ g_item }}
         ansible.builtin.file:
           path: "{{tomcat_target_dir}}"
           group: "{{ g_item }}"

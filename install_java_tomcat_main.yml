@@ -1,21 +1,21 @@
 ---
-- name: Install Java & Tomcat on linux & windows os
+- name: Install Java & Tomcat on linux & windows OS machines
   hosts: "{{ machine }}"
   vars_prompt:
       - name: machine
-        prompt: "Please enter on which machines you want to Install Java & Tomcat: \n 1. windows \n 2. linux "
+        prompt: "Please mention on which OS machines you want to Install Java & Tomcat: \n 1. windows \n 2. linux \n"
         private: no
       - name: java_target_dir
-        prompt: Enter the target directory where you want to install Java
+        prompt: Please mention target directory where you want to install Java
         private: no
       - name: tomcat_target_dir
-        prompt: Enter the target directory where you want to install tomcat
+        prompt: Please mention target directory where you want to install tomcat
         private: no
       - name: u_item
-        prompt: "Please enter user ownership who will manage Java & Tomcat"
+        prompt: "Please mention user ownership who will manage Java & Tomcat"
         private: no
       - name: g_item
-        prompt: "Please enter group ownership who will manage Java & Tomcat"
+        prompt: "Please mention group ownership who will manage Java & Tomcat"
         private: no
   tasks:
       - name: Import linux Install Java & Tomcat playbook
