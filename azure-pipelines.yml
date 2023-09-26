@@ -14,7 +14,7 @@ pool: Default
 steps:
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
-- script: ansible-playbook -e "hosts=$(machine)" -i inv.yml check_connectivity.yml
+- script: ansible-playbook -e "machine=$(machine)" -i inv.yml check_connectivity.yml
   displayName: 'check connectivity'
 # - task: Ansible@0
 #   inputs:
