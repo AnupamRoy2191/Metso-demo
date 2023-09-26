@@ -16,6 +16,13 @@ steps:
   displayName: 'Run a one-line script'
 - script: ansible-playbook -e "hosts=$targetHosts" -i inv.yml check_connectivity.yml
   displayName: 'check connectivity'
+- task: Ansible@0
+  inputs:
+    ansibleInterface: 'agentMachine'
+    playbookPathOnAgentMachine: 'check_connectivity.yml'
+    inventoriesAgentMachine: 'file'
+    inventoryFileOnAgentMachine: 'inv.yml'
+    args: '-e "hosts=$targetHosts"'
 # - script: |
 #     echo Add other tasks to build, test, and deploy your project.
 #     echo See https://aka.ms/yaml
