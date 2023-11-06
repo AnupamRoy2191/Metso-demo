@@ -15,5 +15,5 @@ steps:
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
 
-- script: ansible-playbook -i inv.yml --vault-password-file <(echo $ANSIBLE_VAULT) win_ping.yml
+- script: ansible-playbook -i inv.yml win_ping.yml --vault-id <(echo $ANSIBLE_VAULT)
   displayName: 'check connectivity'
