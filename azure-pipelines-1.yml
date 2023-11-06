@@ -7,7 +7,7 @@ trigger:
 - main
 
 variables:
-  ANSIBLE-VAULT: $(ANSIBLE-VAULT)
+  ANSIBLE_VAULT: $(ANSIBLE_VAULT)
 
 pool: Default
 
@@ -15,5 +15,5 @@ steps:
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
 
-- script: ansible-playbook -i inv.yml --vault-password-file <(echo $ANSIBLE-VAULT) win_ping.yml
+- script: ansible-playbook -i inv.yml --vault-password-file <(echo $ANSIBLE_VAULT) win_ping.yml
   displayName: 'check connectivity'
