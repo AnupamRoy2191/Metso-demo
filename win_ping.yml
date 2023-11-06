@@ -1,7 +1,8 @@
 ---
-    - name: test connection on remote machines
+- name: check connection
+  hosts: windows
+  vars:
+    ansible_auth_type: kerberos
+  tasks:
+    - name: ping windows machine
       win_ping:
-      register: result
-    - name: print the result
-      debug:
-        msg: "{{ result }}"

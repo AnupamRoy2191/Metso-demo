@@ -1,7 +1,7 @@
 all:
   hosts:
     40.117.227.189:
-    20.51.203.11:
+    20.84.77.145:
 
   children:
     linux:
@@ -9,7 +9,7 @@ all:
         40.117.227.189:
     windows:
       hosts:
-        20.51.203.11:
+        20.84.77.145:
       vars:
         ansible_user: ansible
         ansible_password: !vault |
@@ -19,6 +19,6 @@ all:
           33383662326164643938633638356361396633313339653065663639646436633437303166616164
           3331633334356533370a306166316565323931313434643831383731323062316339396235623536
           6538
-        ansible_port: 5985
-        ansible_connection: winrm
-        ansible_winrm_transport: ntlm
+        ansible_connection: psrp
+        ansible_psrp_protocol: http
+        ansible_psrp_cert_validation: ignore
