@@ -14,5 +14,5 @@ steps:
 
 - script: ansible-playbook -i inv.yml win_ping.yml --vault-password-file vault_password_file
   env:
-    vault_password_file: $(ANSIBLE_VAULT)
+    vault_password_file: $(ansible_vault)
   displayName: 'check connectivity'
