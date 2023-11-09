@@ -9,11 +9,18 @@ trigger:
 pool: Default
 
 steps:
+
+- task: DownloadSecureFile@1
+  name: vault_password
+  displayName: 'Download a vault password file'
+  inputs:
+    secureFile: 'vault_password.txt'
+    
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
 
 - script: ansible-playbook -i inv.yml win_ping.yml --vault-password-file VAULT_PASSWORD_FILE
   env:
 #    vault_password_file: $(ansible_vault)
-    VAULT_PASSWORD_FILE: '$(System.DefaultWorkingDirectory)/vault_password.txt'
+   VAULT_PASSWORD_FILE: '$(System.DefaultWorkingDirectory)/vault_password.txt'
   displayName: 'check connectivity'
