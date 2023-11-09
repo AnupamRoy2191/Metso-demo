@@ -1,7 +1,7 @@
 all:
   hosts:
     40.117.227.189:
-    20.84.77.145:
+    20.172.183.240:
 
   children:
     linux:
@@ -9,7 +9,7 @@ all:
         40.117.227.189:
     windows:
       hosts:
-        20.84.77.145:
+        20.172.183.240:
       vars:
         ansible_user: ansible
         ansible_password: !vault |
