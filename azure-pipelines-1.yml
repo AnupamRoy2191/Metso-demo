@@ -18,15 +18,15 @@ steps:
 - script: echo Hello, world!
   displayName: 'Run a one-line script'
 
-#- script: ansible-playbook -i inv.yml win_ping.yml --vault-password-file VAULT_PASSWORD_FILE
-#  env:
+- script: ansible-playbook -i inv.yml win_ping.yml --vault-password-file "$(VAULT_PASSWORD_FILE)"
+  env:
 #    vault_password_file: $(ansible_vault)
 #   VAULT_PASSWORD_FILE: '$(Agent.TempDirectory)/vault-password.txt'
-#   VAULT_PASSWORD_FILE: '--key-file $(vault_password.secureFilePath)'
-#  displayName: 'check connectivity'
+   VAULT_PASSWORD_FILE: '$(vault_password.secureFilePath)'
+  displayName: 'check connectivity'
 
-- script: |
-    ansible-playbook -i inv.yml win_ping.yml --vault-password-file "$(vault_password.secureFilePath)"
-  displayName: 'Run Ansible playbook with vault password file'
-  env:
-    VAULT_PASSWORD_FILE: '$(vault_password.secureFilePath)'
+#- script: |
+#    ansible-playbook -i inv.yml win_ping.yml --vault-password-file "$(vault_password.secureFilePath)"
+#  displayName: 'Run Ansible playbook with vault password file'
+#  env:
+#    VAULT_PASSWORD_FILE: '$(vault_password.secureFilePath)'
