@@ -1,0 +1,30 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+jobs:
+- job: DeployAnsibleScripts
+  pool:
+    vmImage: 'rhel-latest'
+  steps:
+  - checkout: self
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.9'
+  - task: DownloadSecureFile@1
+    name: vault_password
+    displayName: 'Download a vault password file'
+    inputs:
+      secureFile: 'vault_password.txt'
+  - script: |
+      dnf install pip
+      pip install ansible
+      ansible --version
+    displayName: 'Install Ansible'
+  - script: |
+       ansible-playbook -i inv.yml win_ping.yml --vault-password-file "$(vault_password.secureFilePath)"
+    displayName: 'Run Ansible playbook with vault password file'
